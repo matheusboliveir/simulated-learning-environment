@@ -1,4 +1,3 @@
-
 from functools import lru_cache
 from typing import Literal
 
@@ -12,6 +11,8 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
     )
+    # DataBase
+    database_url: str
 
     # Provider
     llm_provider: Literal["gemini", "ollama"] = "gemini"
