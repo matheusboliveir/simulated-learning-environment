@@ -1,0 +1,22 @@
+from app.agents.client.schemas.states.behavioral_state import BehavioralState
+from app.agents.client.schemas.states.retrieved_message import RetrievedMessage
+from app.agents.client.sub_agents.disclosure_planner.schemas.disclosure_planner_output import (
+    DisclosurePlannerOutput,
+)
+from app.agents.client.sub_agents.tolerance_evaluator.schemas.tolerance_evaluator_output import (
+    ToleranceEvaluatorOutput,
+)
+from app.agents.client.sub_agents.trust_evaluator.schemas.trust_evaluator_output import (
+    TrustEvaluatorOutput,
+)
+from app.domain.schemas.strict_schema import StrictSchema
+
+
+class ResponseGeneratorInput(StrictSchema):
+    student_message: str
+    client_personality: str
+    behavioral_state: BehavioralState
+    trust_assessment: TrustEvaluatorOutput
+    tolerance_assessment: ToleranceEvaluatorOutput
+    relevant_messages: list[RetrievedMessage]
+    disclosure_plan: DisclosurePlannerOutput
