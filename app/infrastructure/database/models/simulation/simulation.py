@@ -9,7 +9,7 @@ from app.domain.enums.simulation_status import SimulationStatus
 from app.infrastructure.database.base import Base
 
 if TYPE_CHECKING:
-    from app.infrastructure.database.models.user import UserModel
+    from app.infrastructure.database.models.user.user import UserModel
 
 
 class SimulationModel(Base):

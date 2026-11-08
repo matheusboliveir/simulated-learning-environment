@@ -10,7 +10,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.infrastructure.database.base import Base
 
 if TYPE_CHECKING:
-    from app.infrastructure.database.models.simulation import SimulationModel
+    from app.infrastructure.database.models.simulation.simulation import SimulationModel
 
 ph = PasswordHasher()
 
