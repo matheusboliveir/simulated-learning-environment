@@ -21,6 +21,8 @@ class CaseModel(Base):
     )
 
     title: Mapped[str] = mapped_column(String(50), nullable=False)
+    
+    description: Mapped[str] = mapped_column(String(255), nullable=False)
 
     active: Mapped[bool] = mapped_column(nullable=False, default=True)
 

@@ -8,10 +8,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.infrastructure.database.base import Base
 
 if TYPE_CHECKING:
+    from app.infrastructure.database.models.simulation.case import CaseModel
     from app.infrastructure.database.models.simulation.persona_snapshot import (
         PersonaSnapshotModel,
     )
-    from app.infrastructure.database.models.user.user import UserModel
 
 
 class CaseSnapshotModel(Base):
@@ -23,7 +23,7 @@ class CaseSnapshotModel(Base):
 
     case_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("cases.id"), nullable=False)
 
-    case: Mapped["UserModel"] = relationship(back_populates="snapshots")
+    case: Mapped["CaseModel"] = relationship(back_populates="snapshots")
 
     persona_snapshot_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("persona_snapshots.id"), nullable=False
@@ -33,6 +33,7 @@ class CaseSnapshotModel(Base):
         back_populates="case_snapshots"
     )
 
+    # Referência à versão da base vetorial RAG
     context_snapshot_id: Mapped[int] = mapped_column(nullable=False)
 
     version: Mapped[int] = mapped_column(nullable=False, autoincrement=True)
