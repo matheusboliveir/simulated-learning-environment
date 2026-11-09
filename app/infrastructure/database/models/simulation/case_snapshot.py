@@ -1,13 +1,14 @@
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
-from sqlalchemy import DateTime, ForeignKey, Uuid, func
+from sqlalchemy import ARRAY, DateTime, ForeignKey, String, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.infrastructure.database.base import Base
 
 if TYPE_CHECKING:
+    from app.infrastructure.database.models.simulation.simulation import SimulationModel
     from app.infrastructure.database.models.simulation.case import CaseModel
     from app.infrastructure.database.models.simulation.persona_snapshot import (
         PersonaSnapshotModel,
@@ -20,24 +21,28 @@ class CaseSnapshotModel(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
+    
+    # Requisitos Esperados
+    expected_requirements: Mapped[List[str]] = mapped_column(ARRAY(String), nullable=False)
 
+    # Snapshots
     case_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("cases.id"), nullable=False)
-
     case: Mapped["CaseModel"] = relationship(back_populates="snapshots")
-
     persona_snapshot_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("persona_snapshots.id"), nullable=False
     )
-
     persona_snapshot: Mapped["PersonaSnapshotModel"] = relationship(
         back_populates="case_snapshots"
     )
 
     # Referência à versão da base vetorial RAG
     context_snapshot_id: Mapped[int] = mapped_column(nullable=False)
-
+    
+    simulations: Mapped[List["SimulationModel"]] = relationship(
+        back_populates="case_snapshot"
+    )
+    # Versionamento
     version: Mapped[int] = mapped_column(nullable=False, autoincrement=True)
-
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
