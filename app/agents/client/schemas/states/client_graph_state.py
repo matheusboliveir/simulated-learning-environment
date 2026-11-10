@@ -1,9 +1,7 @@
-from typing import TypedDict
+from typing import List, TypedDict
 
 from app.agents.client.schemas.client_output import ClientOutput
 from app.agents.client.schemas.states.behavioral_state import BehavioralState
-from app.agents.client.schemas.states.knowledge_state import KnowledgeState
-from app.agents.client.schemas.states.retrieved_context import RetrievedContext
 from app.agents.client.sub_agents.disclosure_planner.schemas.disclosure_planner_output import (
     DisclosurePlannerOutput,
 )
@@ -17,12 +15,13 @@ from app.agents.client.sub_agents.trust_evaluator.schemas.trust_evaluator_output
     TrustEvaluatorOutput,
 )
 from app.domain.enums.tolerance_preset import TolerancePreset
+from app.infrastructure.database.models.simulation.simulation_message import SimulationMessageModel
 
 
 class ClientGraphState(TypedDict, total=False):
     # Identificação da execução
     simulation_id: str
-    interaction_id: str
+    message_id: str
     # Entrada
     student_message: str
     # Configuração do cliente
@@ -31,9 +30,7 @@ class ClientGraphState(TypedDict, total=False):
     # Estado comportamental
     behavioral_state: BehavioralState
     # Contexto recuperado
-    retrieved_context: RetrievedContext
-    # Conhecimento adicional
-    knowledge_state: KnowledgeState
+    retrieved_messages: List[SimulationMessageModel]
     # Avaliações
     interaction_assessment: InteractionEvaluatorOutput
     trust_assessment: TrustEvaluatorOutput

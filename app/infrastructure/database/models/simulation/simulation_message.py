@@ -19,13 +19,13 @@ class SimulationMessageModel(Base):
         Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
 
-		# Simulação da mensagem
+	# Simulação da mensagem
     simulation_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("simulations.id"), nullable=False
     )
     simulation: Mapped["SimulationModel"] = relationship(back_populates="messages")
 
-		# Quem enviou a mensagem
+	# Quem enviou a mensagem
     role: Mapped[MessageRole] = mapped_column(String(20), nullable=False)
     
     # Conteudo da mensagem

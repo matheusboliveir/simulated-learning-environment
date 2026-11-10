@@ -1,5 +1,4 @@
 from app.agents.client.schemas.states.behavioral_state import BehavioralState
-from app.agents.client.schemas.states.retrieved_message import RetrievedMessage
 from app.agents.client.sub_agents.disclosure_planner.schemas.disclosure_planner_output import (
     DisclosurePlannerOutput,
 )
@@ -10,6 +9,7 @@ from app.agents.client.sub_agents.trust_evaluator.schemas.trust_evaluator_output
     TrustEvaluatorOutput,
 )
 from app.domain.schemas.strict_schema import StrictSchema
+from app.infrastructure.database.models.simulation.simulation_message import SimulationMessageModel
 
 
 class ResponseGeneratorInput(StrictSchema):
@@ -18,5 +18,5 @@ class ResponseGeneratorInput(StrictSchema):
     behavioral_state: BehavioralState
     trust_assessment: TrustEvaluatorOutput
     tolerance_assessment: ToleranceEvaluatorOutput
-    relevant_messages: list[RetrievedMessage]
+    relevant_messages: list[SimulationMessageModel]
     disclosure_plan: DisclosurePlannerOutput
