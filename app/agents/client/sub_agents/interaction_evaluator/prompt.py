@@ -1,4 +1,3 @@
-
 INTERACTION_EVALUATOR_SYSTEM_PROMPT = """
 You are an Interaction Evaluator in a simulated software requirements
 elicitation environment.

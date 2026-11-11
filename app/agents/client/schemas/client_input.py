@@ -9,12 +9,17 @@ from app.agents.client.sub_agents.trust_evaluator.schemas.trust_evaluator_output
     TrustEvaluatorOutput,
 )
 from app.domain.schemas.strict_schema import StrictSchema
-from app.infrastructure.database.models.simulation.simulation_message import SimulationMessageModel
+from app.infrastructure.database.models.simulation.persona_snapshot import (
+    PersonaSnapshotModel,
+)
+from app.infrastructure.database.models.simulation.simulation_message import (
+    SimulationMessageModel,
+)
 
 
 class ResponseGeneratorInput(StrictSchema):
     student_message: str
-    client_personality: str
+    persona: PersonaSnapshotModel
     behavioral_state: BehavioralState
     trust_assessment: TrustEvaluatorOutput
     tolerance_assessment: ToleranceEvaluatorOutput

@@ -30,6 +30,11 @@ class Settings(BaseSettings):
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "gemma3"
 
+    # Qdrant
+    qdrant_url: str = "http://localhost:6333"
+    qdrant_api_key: SecretStr | None = None
+    qdrant_timeout: int = 30
+
 
 @lru_cache
 def get_settings() -> Settings:

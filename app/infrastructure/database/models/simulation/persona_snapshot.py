@@ -1,6 +1,6 @@
-from datetime import datetime
-from typing import TYPE_CHECKING, List
 import uuid
+from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ARRAY, DateTime, String, Text, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -9,7 +9,9 @@ from app.domain.enums.tolerance_preset import TolerancePreset
 from app.infrastructure.database.base import Base
 
 if TYPE_CHECKING:
-    from app.infrastructure.database.models.simulation.case_snapshot import CaseSnapshotModel
+    from app.infrastructure.database.models.simulation.case_snapshot import (
+        CaseSnapshotModel,
+    )
 
 
 class PersonaSnapshotModel(Base):
@@ -22,7 +24,7 @@ class PersonaSnapshotModel(Base):
     # Dados
     name: Mapped[str] = mapped_column(String(50), nullable=False)
     position: Mapped[str] = mapped_column(String(50), nullable=False)
-    knowledge: Mapped[List[str]] = mapped_column(ARRAY(String), nullable=False)
+    knowledge: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
 
     # Comportamento e tom
     personality: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -31,14 +33,14 @@ class PersonaSnapshotModel(Base):
         nullable=False,
         default=TolerancePreset.PROFESSIONAL,
     )
-    
+
     # Interesses
     background: Mapped[str] = mapped_column(Text, nullable=False)
-    pain_points: Mapped[List[str]] = mapped_column(ARRAY(String), nullable=False)
-    biases: Mapped[List[str]] = mapped_column(ARRAY(String), nullable=False)
-    
+    pain_points: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
+    biases: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
+
     # Controle de criação
-    case_snapshots: Mapped[List["CaseSnapshotModel"]] = relationship(
+    case_snapshots: Mapped[list["CaseSnapshotModel"]] = relationship(
         back_populates="persona_snapshot"
     )
     created_at: Mapped[datetime] = mapped_column(

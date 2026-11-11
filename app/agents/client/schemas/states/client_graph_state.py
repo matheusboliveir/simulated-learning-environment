@@ -1,4 +1,4 @@
-from typing import List, TypedDict
+from typing import TypedDict
 
 from app.agents.client.schemas.client_output import ClientOutput
 from app.agents.client.schemas.states.behavioral_state import BehavioralState
@@ -14,8 +14,12 @@ from app.agents.client.sub_agents.tolerance_evaluator.schemas.tolerance_evaluato
 from app.agents.client.sub_agents.trust_evaluator.schemas.trust_evaluator_output import (
     TrustEvaluatorOutput,
 )
-from app.domain.enums.tolerance_preset import TolerancePreset
-from app.infrastructure.database.models.simulation.simulation_message import SimulationMessageModel
+from app.infrastructure.database.models.simulation.persona_snapshot import (
+    PersonaSnapshotModel,
+)
+from app.infrastructure.database.models.simulation.simulation_message import (
+    SimulationMessageModel,
+)
 
 
 class ClientGraphState(TypedDict, total=False):
@@ -25,12 +29,12 @@ class ClientGraphState(TypedDict, total=False):
     # Entrada
     student_message: str
     # Configuração do cliente
-    client_personality: str
-    tolerance_preset: TolerancePreset
+    persona: PersonaSnapshotModel
     # Estado comportamental
     behavioral_state: BehavioralState
     # Contexto recuperado
-    retrieved_messages: List[SimulationMessageModel]
+    retrieved_messages: list[SimulationMessageModel]
+    business_context: str
     # Avaliações
     interaction_assessment: InteractionEvaluatorOutput
     trust_assessment: TrustEvaluatorOutput
