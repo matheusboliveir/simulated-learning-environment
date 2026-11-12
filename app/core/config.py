@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     qdrant_api_key: SecretStr | None = None
     qdrant_timeout: int = 30
 
+    # Embeddings
+    embedding_provider: Literal["gemini", "ollama"] = "gemini"
+    embedding_model: str | None = None
+    embedding_dimensions: int = 768
+
 
 @lru_cache
 def get_settings() -> Settings:

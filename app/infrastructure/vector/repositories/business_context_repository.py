@@ -1,7 +1,10 @@
-from uuid import UUID
+from uuid import NAMESPACE_URL, UUID, uuid5
 
 from qdrant_client import AsyncQdrantClient, models
 
+from app.domain.schemas.retrieved_context_chunk_schema import (
+    RetrievedContextChunk,
+)
 from app.infrastructure.vector.collections.business_context_chunks import (
     BUSINESS_CONTEXT_COLLECTION as COLLECTION_NAME,
 )
@@ -25,10 +28,9 @@ class BusinessContextRepository:
         points = [
             models.PointStruct(
                 id=str(
-                    UUID(
-                        bytes=__import__("hashlib")
-                        .md5(f"{context_snapshot_id}:{index}".encode())
-                        .digest()
+                    uuid5(
+                        NAMESPACE_URL,
+                        f"{context_snapshot_id}:{index}",
                     )
                 ),
                 vector=embedding,
@@ -55,7 +57,7 @@ class BusinessContextRepository:
         context_snapshot_id: UUID,
         embedding: list[float],
         limit: int = 5,
-    ) -> list[models.ScoredPoint]:
+    ) -> list[RetrievedContextChunk]:
         result = await self._client.query_points(
             collection_name=COLLECTION_NAME,
             query=embedding,
@@ -72,7 +74,16 @@ class BusinessContextRepository:
             with_vectors=False,
         )
 
-        return result.points
+        chunks = [
+            RetrievedContextChunk(
+                content=point.payload["content"],
+                chunk_index=point.payload["chunk_index"],
+                score=point.score,
+            )
+            for point in result.points
+        ]
+
+        return sorted(chunks, key=lambda chunk: chunk.chunk_index)
 
     async def delete_snapshot_chunks(
         self,

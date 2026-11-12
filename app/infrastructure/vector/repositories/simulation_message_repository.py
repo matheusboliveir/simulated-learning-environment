@@ -1,8 +1,11 @@
-from datetime import datetime
 from uuid import UUID
 
 from qdrant_client import AsyncQdrantClient, models
 
+from app.domain.schemas.retrieved_simulation_message_schema import (
+    RetrievedSimulationMessage,
+)
+from app.domain.schemas.simulation_message_schema import SimulationMessage
 from app.infrastructure.vector.collections.simulation_messages import (
     SIMULATION_MESSAGES_COLLECTION as COLLECTION_NAME,
 )
@@ -14,24 +17,13 @@ class SimulationMessageRepository:
 
     async def add_message(
         self,
-        message_id: UUID,
-        simulation_id: UUID,
-        role: str,
-        content: str,
+        message: SimulationMessage,
         embedding: list[float],
-        sequence: int,
-        created_at: datetime,
     ) -> None:
         point = models.PointStruct(
-            id=str(message_id),
+            id=str(message.id),
             vector=embedding,
-            payload={
-                "simulation_id": str(simulation_id),
-                "role": role,
-                "content": content,
-                "sequence": sequence,
-                "created_at": created_at.isoformat(),
-            },
+            payload=message.model_dump(mode="json"),
         )
 
         await self._client.upsert(
@@ -44,7 +36,7 @@ class SimulationMessageRepository:
         self,
         simulation_id: UUID,
         limit: int = 5,
-    ) -> list[models.Record]:
+    ) -> list[SimulationMessage]:
         points, _ = await self._client.scroll(
             collection_name=COLLECTION_NAME,
             scroll_filter=models.Filter(
@@ -65,15 +57,18 @@ class SimulationMessageRepository:
         )
 
         # Retorna as mensagens em ordem cronológica.
-        return list(reversed(points))
+        return [
+            SimulationMessage.model_validate(point.payload)
+            for point in reversed(points)
+        ]
 
     async def search_similar_messages(
         self,
         simulation_id: UUID,
         embedding: list[float],
-        limit: int = 5,
+        limit: int = 10,
         before_sequence: int | None = None,
-    ) -> list[models.ScoredPoint]:
+    ) -> list[RetrievedSimulationMessage]:
         conditions = [
             models.FieldCondition(
                 key="simulation_id",
@@ -98,7 +93,16 @@ class SimulationMessageRepository:
             with_vectors=False,
         )
 
-        return result.points
+        return sorted(
+            [
+                RetrievedSimulationMessage(
+                    message=SimulationMessage.model_validate(point.payload),
+                    score=point.score,
+                )
+                for point in result.points
+            ],
+            key=lambda item: item.message.sequence,
+        )
 
     async def delete_simulation_messages(
         self,

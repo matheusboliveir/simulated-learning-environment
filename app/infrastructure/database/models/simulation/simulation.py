@@ -12,9 +12,6 @@ if TYPE_CHECKING:
     from app.infrastructure.database.models.simulation.case_snapshot import (
         CaseSnapshotModel,
     )
-    from app.infrastructure.database.models.simulation.simulation_message import (
-        SimulationMessageModel,
-    )
     from app.infrastructure.database.models.user.user import UserModel
 
 
@@ -38,13 +35,6 @@ class SimulationModel(Base):
     )
     case_snapshot: Mapped["CaseSnapshotModel"] = relationship(
         back_populates="simulations"
-    )
-
-    # Hitórico de mensagens
-    messages: Mapped[list["SimulationMessageModel"]] = relationship(
-        back_populates="simulation",
-        cascade="all, delete-orphan",
-        order_by="SimulationMessageModel.created_at",
     )
 
     # Estados dinâmincos
