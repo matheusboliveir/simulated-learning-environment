@@ -8,12 +8,10 @@ from app.agents.client.sub_agents.tolerance_evaluator.schemas.tolerance_evaluato
 from app.agents.client.sub_agents.trust_evaluator.schemas.trust_evaluator_output import (
     TrustEvaluatorOutput,
 )
+from app.domain.schemas.simulation_message_schema import SimulationMessage
 from app.domain.schemas.strict_schema import StrictSchema
 from app.infrastructure.database.models.simulation.persona_snapshot import (
     PersonaSnapshotModel,
-)
-from app.infrastructure.database.models.simulation.simulation_message import (
-    SimulationMessageModel,
 )
 
 
@@ -23,5 +21,5 @@ class ResponseGeneratorInput(StrictSchema):
     behavioral_state: BehavioralState
     trust_assessment: TrustEvaluatorOutput
     tolerance_assessment: ToleranceEvaluatorOutput
-    relevant_messages: list[SimulationMessageModel]
+    relevant_messages: list[SimulationMessage]
     disclosure_plan: DisclosurePlannerOutput

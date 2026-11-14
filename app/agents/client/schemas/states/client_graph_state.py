@@ -14,11 +14,9 @@ from app.agents.client.sub_agents.tolerance_evaluator.schemas.tolerance_evaluato
 from app.agents.client.sub_agents.trust_evaluator.schemas.trust_evaluator_output import (
     TrustEvaluatorOutput,
 )
+from app.domain.schemas.simulation_message_schema import SimulationMessage
 from app.infrastructure.database.models.simulation.persona_snapshot import (
     PersonaSnapshotModel,
-)
-from app.infrastructure.database.models.simulation.simulation_message import (
-    SimulationMessageModel,
 )
 
 
@@ -33,7 +31,7 @@ class ClientGraphState(TypedDict, total=False):
     # Estado comportamental
     behavioral_state: BehavioralState
     # Contexto recuperado
-    retrieved_messages: list[SimulationMessageModel]
+    retrieved_messages: list[SimulationMessage]
     business_context: str
     # Avaliações
     interaction_assessment: InteractionEvaluatorOutput

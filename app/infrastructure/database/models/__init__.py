@@ -6,16 +6,12 @@ from app.infrastructure.database.models.simulation.persona_snapshot import (
     PersonaSnapshotModel,
 )
 from app.infrastructure.database.models.simulation.simulation import SimulationModel
-from app.infrastructure.database.models.simulation.simulation_message import (
-    SimulationMessageModel,
-)
 from app.infrastructure.database.models.user.user import UserModel
 
 __all__ = [
     "CaseModel",
     "CaseSnapshotModel",
     "PersonaSnapshotModel",
-    "SimulationMessageModel",
     "SimulationModel",
     "UserModel",
 ]

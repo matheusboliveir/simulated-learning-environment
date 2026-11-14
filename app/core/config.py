@@ -12,13 +12,12 @@ class Settings(BaseSettings):
         extra="ignore",
     )
     # DataBase
-    database_url: str
+    database_url: str = ""
 
     # Provider
     llm_provider: Literal["gemini", "ollama"] = "gemini"
 
     # General settings
-    llm_model: str | None = None
     llm_temperature: float = 0.7
     llm_timeout: int = 120
 

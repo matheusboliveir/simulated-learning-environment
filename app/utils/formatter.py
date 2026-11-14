@@ -5,16 +5,14 @@ from pydantic import BaseModel
 from app.agents.client.sub_agents.interaction_evaluator.schemas.identified_behavior import (
     IdentifiedBehavior,
 )
+from app.domain.schemas.simulation_message_schema import SimulationMessage
 from app.infrastructure.database.models.simulation.persona_snapshot import (
     PersonaSnapshotModel,
-)
-from app.infrastructure.database.models.simulation.simulation_message import (
-    SimulationMessageModel,
 )
 
 
 def format_retrieved_messages(
-    messages: list[SimulationMessageModel],
+    messages: list[SimulationMessage],
 ) -> str:
     formatted_messages = [
         f"[{msg.role}]: {msg.content} (Trust delta: {msg.trust_delta}, Tolerance delta: {msg.tolerance_delta})"

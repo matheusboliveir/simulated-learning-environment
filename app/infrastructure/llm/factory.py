@@ -17,10 +17,7 @@ def get_chat_model(
         else settings.llm_temperature
     )
 
-    model = (
-        agent_config.model
-        or settings.llm_model
-    )
+    model = agent_config.model
 
     if settings.llm_provider == "gemini":
         from langchain_google_genai import ChatGoogleGenerativeAI

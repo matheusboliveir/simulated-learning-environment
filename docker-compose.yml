@@ -36,38 +36,63 @@ services:
     image: ollama/ollama:latest
     container_name: sle-ollama
     restart: unless-stopped
+    profiles:
+      - ollama
     ports:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        ollama serve &
+        echo "Aguardando o Ollama iniciar..."
+        until ollama list >/dev/null 2>&1; do
+          sleep 1
+        done
+        echo "Baixando/verificando modelos..."
+        ollama pull nomic-embed-text
+        ollama pull gemma3
+        wait
     healthcheck:
       test: ["CMD", "ollama", "list"]
       interval: 10s
       timeout: 5s
       retries: 10
 
-  ollama-init:
-    image: ollama/ollama:latest
-    container_name: sle-ollama-init
-    restart: "no"
-    environment:
-      OLLAMA_HOST: http://ollama:11434
-    depends_on:
-      ollama:
-        condition: service_healthy
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        ollama pull nomic-embed-text
-        ollama pull gemma3
-
-  app:
+  app-gemini:
     build: .
     container_name: fastapi-app
+    profiles:
+      - gemini
     restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
+      LLM_PROVIDER: gemini
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      QDRANT_URL: http://qdrant:6333
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    command: >
+      sh -c "uv run alembic upgrade head &&
+             uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  app-ollama:
+    build: .
+    container_name: fastapi-app
+    profiles:
+      - ollama
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      LLM_PROVIDER: ollama
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       QDRANT_URL: http://qdrant:6333
       OLLAMA_BASE_URL: http://ollama:11434
@@ -80,12 +105,9 @@ services:
         condition: service_healthy
       ollama:
         condition: service_healthy
-      ollama-init:
-        condition: service_completed_successfully
     command: >
       sh -c "uv run alembic upgrade head &&
              uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
-
 volumes:
   postgres_data:
   qdrant_data:
