@@ -15,7 +15,7 @@ def format_retrieved_messages(
     messages: list[SimulationMessage],
 ) -> str:
     formatted_messages = [
-        f"[{msg.role}]: {msg.content} (Trust delta: {msg.trust_delta}, Tolerance delta: {msg.tolerance_delta})"
+        f"[Sequence: {msg.sequence}] [{msg.role}]: {msg.content} (Trust delta: {msg.trust_delta}, Tolerance delta: {msg.tolerance_delta})"
         for msg in messages
     ]
 
@@ -26,7 +26,9 @@ def format_retrieved_messages(
     )
 
 
-def format_untrusted_text(value: str) -> str:
+def format_untrusted_text(value: str | None) -> str:
+    if not value:
+        return ""
     return json.dumps(value, ensure_ascii=False)
 
 
@@ -61,7 +63,9 @@ def format_identified_behaviors(behaviors: list[IdentifiedBehavior]) -> str:
     return json.dumps(data, ensure_ascii=False, indent=2)
 
 
-def format_schema(schema: BaseModel) -> str:
+def format_schema(schema: BaseModel | None) -> str:
+    if not schema:
+        return "";
     data = schema.model_dump(mode="json", exclude_none=True)
 
     return json.dumps(

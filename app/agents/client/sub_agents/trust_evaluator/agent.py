@@ -41,19 +41,19 @@ class TrustEvaluator:
             return TrustEvaluatorOutput(
                 trust_delta=0,
                 reason="No identified behaviors were provided.",
-                evaluated_behaviors=[],
+                evaluated_criteria=[],
             )
 
         if input.current_trust > 5:
             return TrustEvaluatorOutput(
                 trust_delta=0,
                 reason="Current trust exceeds the persona's maximum trust.",
-                evaluated_behaviors=[],
+                evaluated_criteria=[],
             )
 
         result = await self._chain.ainvoke(
             {
-                "persona_snapshot": format_persona_snapshot(input.persona_snapshot),
+                "persona_snapshot": format_persona_snapshot(input.persona),
                 "identified_behaviors": format_identified_behaviors(
                     input.identified_behaviors
                 ),

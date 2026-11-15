@@ -1,6 +1,6 @@
-from typing import TypedDict
+from app.domain.schemas.strict_schema import StrictSchema
 
 
-class BehavioralState(TypedDict):
-    tolerance: float
+class BehavioralState(StrictSchema):
+    tolerance: int
     trust: float

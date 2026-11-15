@@ -1,6 +1,5 @@
-from typing import TypedDict
+from typing import Required, TypedDict
 
-from app.agents.client.schemas.client_output import ClientOutput
 from app.agents.client.schemas.states.behavioral_state import BehavioralState
 from app.agents.client.sub_agents.disclosure_planner.schemas.disclosure_planner_output import (
     DisclosurePlannerOutput,
@@ -22,14 +21,15 @@ from app.infrastructure.database.models.simulation.persona_snapshot import (
 
 class ClientGraphState(TypedDict, total=False):
     # Identificação da execução
-    simulation_id: str
-    message_id: str
+    simulation_id: Required[str]
+    message_id: Required[str]
+    case_snapshot_id: Required[str]
     # Entrada
-    student_message: str
+    student_message: Required[str]
     # Configuração do cliente
-    persona: PersonaSnapshotModel
+    persona: Required[PersonaSnapshotModel]
     # Estado comportamental
-    behavioral_state: BehavioralState
+    behavioral_state: Required[BehavioralState]
     # Contexto recuperado
     retrieved_messages: list[SimulationMessage]
     business_context: str
@@ -40,4 +40,4 @@ class ClientGraphState(TypedDict, total=False):
     # Planejamento
     disclosure_plan: DisclosurePlannerOutput
     # Resultado
-    client_response: ClientOutput
+    client_response: str

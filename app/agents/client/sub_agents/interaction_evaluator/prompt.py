@@ -39,10 +39,19 @@ The current message is the primary subject of the evaluation.
 
 All identified behaviors must be supported by its content.
 
+When the current message is written in a language the simulated
+persona does not speak, consider that the persona cannot understand
+what the student wrote. Do not assume the persona can translate
+or otherwise infer the message's meaning. Determine which languages
+the persona speaks only from the provided context.
+
 ### Retrieved Conversation History
 
 The conversation history must be used exclusively as contextual
 information to interpret the current message.
+
+The sequence number identifies a message's position in the conversation:
+higher sequence numbers indicate newer messages.
 
 Use it primarily to:
 

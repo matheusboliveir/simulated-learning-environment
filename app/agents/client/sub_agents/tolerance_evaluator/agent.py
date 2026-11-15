@@ -44,7 +44,7 @@ class ToleranceEvaluator:
                 evaluated_behaviors=[],
             )
 
-        maximum_tolerance = TOLERANCE_INITIAL_VALUES[input.persona_snapshot.tolerance]
+        maximum_tolerance = TOLERANCE_INITIAL_VALUES[input.persona.tolerance]
 
         if input.current_tolerance > maximum_tolerance:
             return ToleranceEvaluatorOutput(
@@ -55,7 +55,7 @@ class ToleranceEvaluator:
 
         result = await self._chain.ainvoke(
             {
-                "persona_snapshot": format_persona_snapshot(input.persona_snapshot),
+                "persona_snapshot": format_persona_snapshot(input.persona),
                 "current_tolerance": input.current_tolerance,
                 "maximum_tolerance": maximum_tolerance,
                 "identified_behaviors": format_identified_behaviors(

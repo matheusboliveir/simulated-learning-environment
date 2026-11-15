@@ -1,6 +1,6 @@
 from qdrant_client import AsyncQdrantClient, models
 
-from app.infrastructure.vector.utils import create_payload_index
+from app.infrastructure.vector.utils.create_payload_index import create_payload_index
 
 BUSINESS_CONTEXT_COLLECTION = "business_context_chunks"
 
@@ -21,6 +21,6 @@ async def ensure_business_context_collection(
     await create_payload_index(
         client,
         BUSINESS_CONTEXT_COLLECTION,
-        "context_snapshot_id",
+        "case_snapshot_id",
         models.PayloadSchemaType.KEYWORD,
     )

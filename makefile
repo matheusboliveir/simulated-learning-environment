@@ -13,7 +13,7 @@ up-ollama:
 	docker compose --profile ollama up -d
 
 down:
-	docker compose down
+	docker compose --profile gemini --profile ollama down --remove-orphans
 
 migration:
 	@test -n "$(MESSAGE)" || { echo '❌ Informe MESSAGE. Exemplo: make migration MESSAGE="create snapshots"'; exit 1; }

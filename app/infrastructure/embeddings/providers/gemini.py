@@ -11,6 +11,6 @@ def create_gemini_embeddings(
 
     return GoogleGenerativeAIEmbeddings(
         model=settings.embedding_model or "models/gemini-embedding-001",
-        google_api_key=settings.gemini_api_key.get_secret_value(),
+        api_key=settings.gemini_api_key,
         output_dimensionality=settings.embedding_dimensions,
     )

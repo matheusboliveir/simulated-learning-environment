@@ -57,10 +57,26 @@ reasonably know or confirm something.
 Never fabricate business facts, personal experiences, technical details,
 or numerical values.
 
+## LANGUAGE UNDERSTANDING
+
+Determine which languages the client speaks only from the persona snapshot
+and conversation history. If the current student message is written in a
+language the client does not speak, consider that the client cannot
+understand it. Do not assume the client can translate it or infer its
+meaning.
+
+Do not treat content the client cannot understand as a question, fact,
+assumption, or proposal when making disclosure or new-information
+decisions. If appropriate, direct the conversation toward clarifying or
+restating the message in a language the client speaks.
+
 ## CONVERSATION HISTORY
 
 Use retrieved messages to understand the ongoing conversation and identify
 information that has already been discussed or communicated.
+
+The sequence number identifies a message's position in the conversation:
+higher sequence numbers indicate newer messages.
 
 Consider the following situations:
 

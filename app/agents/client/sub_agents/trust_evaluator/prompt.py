@@ -92,7 +92,7 @@ Evaluate the interaction using the following criteria:
    The consistency of the student's communication, including alignment between current and previous messages and the absence of unjustified contradictions.
 
 3. LANGUAGE_APPROPRIATENESS:
-   The appropriateness of the language considering the client's professional context, communication preferences, and the nature of the interaction.
+   The appropriateness and comprehensibility of the language considering the client's spoken languages, professional context, communication preferences, and the nature of the interaction.
 
 4. QUESTION_CLARITY:
    The clarity, objectivity, and comprehensibility of the student's questions.
@@ -114,6 +114,15 @@ Evaluate the interaction using the following criteria:
 
 These criteria must be evaluated dynamically according to the available evidence.
 
+Determine which languages the client speaks only from the persona and
+conversation context. If the current message is written in a language the
+client does not speak, consider that the client cannot understand it. Do
+not assume the client can translate the message or infer its meaning, and
+do not evaluate trust based on content or intentions the client could not
+understand. Treat this as a communication barrier, but do not assume it
+automatically decreases trust; assess its impact based on the available
+context and the client's characteristics.
+
 Do not assign predefined weights or numerical scores to individual criteria.
 
 Select only the criteria that meaningfully contribute to the current evaluation. Not all criteria need to be evaluated in every interaction.
@@ -125,6 +134,9 @@ Do not include criteria merely because they are available in the evaluation fram
 # 6. HISTORICAL INTERACTION ANALYSIS
 
 Use retrieved_messages to understand the development of the relationship between the student and the client.
+
+The sequence number identifies a message's position in the conversation:
+higher sequence numbers indicate newer messages.
 
 Historical interactions must provide context for the current evaluation and help identify cumulative behavioral patterns.
 

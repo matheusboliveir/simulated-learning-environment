@@ -1,6 +1,7 @@
 from qdrant_client import AsyncQdrantClient, models
 
-from app.infrastructure.vector.utils import create_payload_index
+from app.infrastructure.vector.utils.create_payload_index import create_payload_index
+
 
 SIMULATION_MESSAGES_COLLECTION = "simulation_messages"
 

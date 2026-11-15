@@ -4,7 +4,6 @@ from pydantic import BaseModel, ConfigDict, Field
 
 class AgentLLMConfig(BaseModel):
     model_config = ConfigDict(frozen=True)
-
     model: str | None = None
     temperature: float | None = Field(
         default=None,

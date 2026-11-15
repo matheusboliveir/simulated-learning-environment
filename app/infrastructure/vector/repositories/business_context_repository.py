@@ -1,4 +1,5 @@
 from uuid import NAMESPACE_URL, UUID, uuid5
+from typing import cast
 
 from qdrant_client import AsyncQdrantClient, models
 
@@ -16,7 +17,7 @@ class BusinessContextRepository:
 
     async def add_chunks(
         self,
-        context_snapshot_id: UUID,
+        case_snapshot_id: UUID,
         chunks: list[str],
         embeddings: list[list[float]],
     ) -> None:
@@ -30,12 +31,12 @@ class BusinessContextRepository:
                 id=str(
                     uuid5(
                         NAMESPACE_URL,
-                        f"{context_snapshot_id}:{index}",
+                        f"{case_snapshot_id}:{index}",
                     )
                 ),
                 vector=embedding,
                 payload={
-                    "context_snapshot_id": str(context_snapshot_id),
+                    "case_snapshot_id": str(case_snapshot_id),
                     "content": content,
                     "chunk_index": index,
                 },
@@ -54,9 +55,9 @@ class BusinessContextRepository:
 
     async def search_similar_chunks(
         self,
-        context_snapshot_id: UUID,
+        case_snapshot_id: UUID,
         embedding: list[float],
-        limit: int = 5,
+        limit: int = 10,
     ) -> list[RetrievedContextChunk]:
         result = await self._client.query_points(
             collection_name=COLLECTION_NAME,
@@ -64,8 +65,8 @@ class BusinessContextRepository:
             query_filter=models.Filter(
                 must=[
                     models.FieldCondition(
-                        key="context_snapshot_id",
-                        match=models.MatchValue(value=str(context_snapshot_id)),
+                        key="case_snapshot_id",
+                        match=models.MatchValue(value=str(case_snapshot_id)),
                     )
                 ]
             ),
@@ -74,20 +75,24 @@ class BusinessContextRepository:
             with_vectors=False,
         )
 
-        chunks = [
-            RetrievedContextChunk(
-                content=point.payload["content"],
-                chunk_index=point.payload["chunk_index"],
-                score=point.score,
+        chunks: list[RetrievedContextChunk] = []
+        for point in result.points:
+            if point.payload is None:
+                continue
+
+            chunks.append(
+                RetrievedContextChunk(
+                    content=point.payload["content"],
+                    chunk_index=cast(int, point.payload["chunk_index"]),
+                    score=point.score,
+                )
             )
-            for point in result.points
-        ]
 
         return sorted(chunks, key=lambda chunk: chunk.chunk_index)
 
     async def delete_snapshot_chunks(
         self,
-        context_snapshot_id: UUID,
+        case_snapshot_id: UUID,
     ) -> None:
         await self._client.delete(
             collection_name=COLLECTION_NAME,
@@ -95,8 +100,8 @@ class BusinessContextRepository:
                 filter=models.Filter(
                     must=[
                         models.FieldCondition(
-                            key="context_snapshot_id",
-                            match=models.MatchValue(value=str(context_snapshot_id)),
+                            key="case_snapshot_id",
+                            match=models.MatchValue(value=str(case_snapshot_id)),
                         )
                     ]
                 )

@@ -35,8 +35,10 @@ class SimulationMessageRepository:
     async def get_latest_messages(
         self,
         simulation_id: UUID,
-        limit: int = 5,
+        limit: int = 10,
     ) -> list[SimulationMessage]:
+        if limit <= 0:
+            raise ValueError("Limit must be greater than zero.")
         points, _ = await self._client.scroll(
             collection_name=COLLECTION_NAME,
             scroll_filter=models.Filter(
@@ -66,10 +68,10 @@ class SimulationMessageRepository:
         self,
         simulation_id: UUID,
         embedding: list[float],
-        limit: int = 10,
+        limit: int = 50,
         before_sequence: int | None = None,
     ) -> list[RetrievedSimulationMessage]:
-        conditions = [
+        conditions: list[models.Condition] = [
             models.FieldCondition(
                 key="simulation_id",
                 match=models.MatchValue(value=str(simulation_id)),
@@ -91,6 +93,7 @@ class SimulationMessageRepository:
             limit=limit,
             with_payload=True,
             with_vectors=False,
+            score_threshold=0.75
         )
 
         return sorted(
