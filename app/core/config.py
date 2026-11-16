@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     # Gemini
     gemini_api_key: SecretStr | None = None
     gemini_model: str = "gemini-2.5-flash"
+    gemini_subagent_model: str = "gemini-3.5-flash-lite"
 
     # Ollama
     ollama_base_url: str = "http://localhost:11434"

@@ -1,11 +1,11 @@
 from pydantic import ConfigDict
 
 from app.agents.client.schemas.states.behavioral_state import BehavioralState
-from app.agents.client.sub_agents.tolerance_evaluator.schemas.tolerance_evaluator_output import (
-    ToleranceEvaluatorOutput,
+from app.agents.client.sub_agents.client_assessment.schemas.tolerance_assessment_output import (
+    ToleranceAssessmentOutput,
 )
-from app.agents.client.sub_agents.trust_evaluator.schemas.trust_evaluator_output import (
-    TrustEvaluatorOutput,
+from app.agents.client.sub_agents.client_assessment.schemas.trust_assessment_output import (
+    TrustAssessmentOutput,
 )
 from app.domain.schemas.simulation_message_schema import SimulationMessage
 from app.domain.schemas.strict_schema import StrictSchema
@@ -23,5 +23,5 @@ class DisclosurePlannerInput(StrictSchema):
     behavioral_state_before: BehavioralState
     behavioral_state_after: BehavioralState
     retrieved_messages: list[SimulationMessage]
-    trust_assessment: TrustEvaluatorOutput
-    tolerance_assessment: ToleranceEvaluatorOutput
+    trust_assessment: TrustAssessmentOutput
+    tolerance_assessment: ToleranceAssessmentOutput

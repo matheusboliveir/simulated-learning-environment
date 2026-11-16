@@ -2,9 +2,6 @@ import json
 
 from pydantic import BaseModel
 
-from app.agents.client.sub_agents.interaction_evaluator.schemas.identified_behavior import (
-    IdentifiedBehavior,
-)
 from app.domain.schemas.simulation_message_schema import SimulationMessage
 from app.infrastructure.database.models.simulation.persona_snapshot import (
     PersonaSnapshotModel,
@@ -50,22 +47,9 @@ def format_persona_snapshot(
     return json.dumps(data, ensure_ascii=False, indent=2)
 
 
-def format_identified_behaviors(behaviors: list[IdentifiedBehavior]) -> str:
-    data = [
-        {
-            "behavior": item.behavior.value,
-            "evidence": item.evidence,
-            "confidence_relevant": item.confidence_relevant,
-        }
-        for item in behaviors
-    ]
-
-    return json.dumps(data, ensure_ascii=False, indent=2)
-
-
 def format_schema(schema: BaseModel | None) -> str:
     if not schema:
-        return "";
+        return ""
     data = schema.model_dump(mode="json", exclude_none=True)
 
     return json.dumps(

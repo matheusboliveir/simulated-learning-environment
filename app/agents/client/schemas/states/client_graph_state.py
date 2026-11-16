@@ -1,17 +1,17 @@
 from typing import Required, TypedDict
 
 from app.agents.client.schemas.states.behavioral_state import BehavioralState
+from app.agents.client.sub_agents.client_assessment.schemas.interaction_assessment_output import (
+    InteractionAssessmentOutput,
+)
+from app.agents.client.sub_agents.client_assessment.schemas.tolerance_assessment_output import (
+    ToleranceAssessmentOutput,
+)
+from app.agents.client.sub_agents.client_assessment.schemas.trust_assessment_output import (
+    TrustAssessmentOutput,
+)
 from app.agents.client.sub_agents.disclosure_planner.schemas.disclosure_planner_output import (
     DisclosurePlannerOutput,
-)
-from app.agents.client.sub_agents.interaction_evaluator.schemas.interaction_evaluator_output import (
-    InteractionEvaluatorOutput,
-)
-from app.agents.client.sub_agents.tolerance_evaluator.schemas.tolerance_evaluator_output import (
-    ToleranceEvaluatorOutput,
-)
-from app.agents.client.sub_agents.trust_evaluator.schemas.trust_evaluator_output import (
-    TrustEvaluatorOutput,
 )
 from app.domain.schemas.simulation_message_schema import SimulationMessage
 from app.infrastructure.database.models.simulation.persona_snapshot import (
@@ -35,9 +35,9 @@ class ClientGraphState(TypedDict, total=False):
     retrieved_messages: list[SimulationMessage]
     business_context: str
     # Avaliações
-    interaction_assessment: InteractionEvaluatorOutput
-    trust_assessment: TrustEvaluatorOutput
-    tolerance_assessment: ToleranceEvaluatorOutput
+    interaction_assessment: InteractionAssessmentOutput
+    trust_assessment: TrustAssessmentOutput
+    tolerance_assessment: ToleranceAssessmentOutput
     # Planejamento
     disclosure_plan: DisclosurePlannerOutput
     # Resultado

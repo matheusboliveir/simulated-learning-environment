@@ -43,12 +43,8 @@ class DisclosurePlanner:
                 "retrieved_messages": format_retrieved_messages(
                     input.retrieved_messages
                 ),
-                "behavioral_state_before": format_schema(
-                    input.behavioral_state_before
-                ),
-                "behavioral_state_after": format_schema(
-                    input.behavioral_state_after
-                ),
+                "behavioral_state_before": format_schema(input.behavioral_state_before),
+                "behavioral_state_after": format_schema(input.behavioral_state_after),
                 "trust_assessment": format_schema(input.trust_assessment),
                 "tolerance_assessment": format_schema(input.tolerance_assessment),
                 "student_message": format_untrusted_text(input.student_message),

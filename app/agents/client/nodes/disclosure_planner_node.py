@@ -8,20 +8,24 @@ from app.agents.client.sub_agents.disclosure_planner.schemas.disclosure_planner_
 
 
 def create_disclosure_planner_node(llm: BaseChatModel):
-    
+
     subagent = DisclosurePlanner(llm)
-    
-    def disclosure_planner(state: ClientGraphState):
+
+    async def disclosure_planner(state: ClientGraphState):
         business_context = state.get("business_context")
-        business_context = business_context if business_context is not None else "no context"
-        
+        business_context = (
+            business_context if business_context is not None else "no context"
+        )
+
         retrieved_messages = state.get("retrieved_messages")
-        retrieved_messages = retrieved_messages if retrieved_messages is not None else []
-        
+        retrieved_messages = (
+            retrieved_messages if retrieved_messages is not None else []
+        )
+
         tolerance_assessment = state.get("tolerance_assessment")
-        
+
         trust_assessment = state.get("trust_assessment")
-        
+
         if not tolerance_assessment or not trust_assessment:
             raise ValueError("no assessments found")
         behavioral_state_after = state.get("behavioral_state_after")
@@ -36,9 +40,9 @@ def create_disclosure_planner_node(llm: BaseChatModel):
             behavioral_state_before=state["behavioral_state"],
             behavioral_state_after=behavioral_state_after,
             tolerance_assessment=tolerance_assessment,
-            trust_assessment=trust_assessment
+            trust_assessment=trust_assessment,
         )
-        result = subagent.evaluate(input)
-        return { "disclosure_plan": result } 
-    
+        result = await subagent.evaluate(input)
+        return {"disclosure_plan": result}
+
     return disclosure_planner
