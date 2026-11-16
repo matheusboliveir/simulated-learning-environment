@@ -222,9 +222,9 @@ Evaluate the client's tolerance based on the information below.
 
 {persona_snapshot}
 
-## CURRENT TOLERANCE
+## TOLERANCE BEFORE THE CURRENT INTERACTION
 
-Current tolerance: {current_tolerance}
+Tolerance immediately before the current student interaction: {current_tolerance}
 Maximum tolerance: {maximum_tolerance}
 
 ## IDENTIFIED BEHAVIORS

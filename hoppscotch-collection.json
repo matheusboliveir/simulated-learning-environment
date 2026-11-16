@@ -1,0 +1,312 @@
+{
+  "info": {
+    "_postman_id": "358891ea-957f-44e4-afd3-1535a900d80c",
+    "name": "Simulated Learning Environment API",
+    "description": "Coleção importável no Hoppscotch pelo formato Postman Collection v2.1. Defina baseUrl e copie os IDs retornados pelas chamadas de criação para as variáveis correspondentes antes de executar as próximas chamadas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "COLE_O_ID_DO_CLIENTE",
+      "type": "string"
+    },
+    {
+      "key": "caseId",
+      "value": "COLE_O_ID_DO_CASE",
+      "type": "string"
+    },
+    {
+      "key": "personaSnapshotId",
+      "value": "COLE_O_ID_DO_PERSONA_SNAPSHOT",
+      "type": "string"
+    },
+    {
+      "key": "caseSnapshotId",
+      "value": "COLE_O_ID_DO_CASE_SNAPSHOT",
+      "type": "string"
+    },
+    {
+      "key": "simulationId",
+      "value": "COLE_O_ID_DA_SIMULACAO",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
+            },
+            "description": "Verifica se a API está disponível."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Setup da simulação",
+      "description": "Execute as chamadas na ordem apresentada. Depois de cada criação, copie o campo id da resposta para a variável indicada na próxima chamada.",
+      "item": [
+        {
+          "name": "Cadastrar cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ana Silva\",\n  \"email\": \"ana.silva@example.com\",\n  \"password\": \"senha-segura-123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "Após executar, copie o campo id da resposta para a variável userId."
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar case",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sistema de biblioteca\",\n  \"description\": \"Entrevista para elicitar requisitos de um sistema de biblioteca.\",\n  \"active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cases",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cases"
+              ]
+            },
+            "description": "Após executar, copie o campo id da resposta para a variável caseId."
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar persona snapshot",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mariana Costa\",\n  \"position\": \"Gerente de operações\",\n  \"knowledge\": [\n    \"processos de empréstimo\",\n    \"gestão de acervo\"\n  ],\n  \"personality\": \"Pragmática e colaborativa\",\n  \"communication_style\": \"Direta e cordial\",\n  \"tolerance\": \"professional\",\n  \"background\": \"Trabalha na biblioteca há oito anos e conhece os principais desafios operacionais.\",\n  \"pain_points\": [\n    \"controle manual de empréstimos\",\n    \"relatórios demorados\"\n  ],\n  \"biases\": [\n    \"prefere soluções simples de usar\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/persona-snapshots",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "persona-snapshots"
+              ]
+            },
+            "description": "Após executar, copie o campo id da resposta para a variável personaSnapshotId. tolerance aceita: intolerant, impatient, professional, sociable ou understanding."
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar case snapshot",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"case_id\": \"{{caseId}}\",\n  \"persona_snapshot_id\": \"{{personaSnapshotId}}\",\n  \"expected_requirements\": [\n    \"Cadastrar livros e exemplares\",\n    \"Registrar empréstimos e devoluções\",\n    \"Consultar disponibilidade do acervo\"\n  ],\n  \"context_snapshot_id\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/case-snapshots",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "case-snapshots"
+              ]
+            },
+            "description": "Usa caseId e personaSnapshotId. Após executar, copie o campo id da resposta para a variável caseSnapshotId."
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar business context",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chunks\": [\n    \"A biblioteca atende estudantes e moradores da comunidade. O acervo inclui livros didáticos, literatura e periódicos.\",\n    \"Atualmente os empréstimos são registrados manualmente. A equipe precisa consultar disponibilidade e acompanhar atrasos.\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/case-snapshots/{{caseSnapshotId}}/business-context",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "case-snapshots",
+                "{{caseSnapshotId}}",
+                "business-context"
+              ]
+            },
+            "description": "Ingere os chunks no Qdrant para o case snapshot indicado por caseSnapshotId. Execute após cadastrar o case snapshot."
+          },
+          "response": []
+        },
+        {
+          "name": "Criar simulação",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"case_snapshot_id\": \"{{caseSnapshotId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/simulations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "simulations"
+              ]
+            },
+            "description": "Usa userId e caseSnapshotId. Após executar, copie o campo id da resposta para a variável simulationId."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Conversação",
+      "item": [
+        {
+          "name": "Enviar mensagem",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Como a equipe controla atualmente os empréstimos de livros?\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/simulations/{{simulationId}}/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "simulations",
+                "{{simulationId}}",
+                "messages"
+              ]
+            },
+            "description": "Envia uma mensagem para a simulação indicada por simulationId."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

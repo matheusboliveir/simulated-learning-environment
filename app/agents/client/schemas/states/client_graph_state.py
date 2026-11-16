@@ -22,14 +22,15 @@ from app.infrastructure.database.models.simulation.persona_snapshot import (
 class ClientGraphState(TypedDict, total=False):
     # Identificação da execução
     simulation_id: Required[str]
-    message_id: Required[str]
     case_snapshot_id: Required[str]
     # Entrada
     student_message: Required[str]
     # Configuração do cliente
     persona: Required[PersonaSnapshotModel]
-    # Estado comportamental
+    # Estado recebido no início da interação
     behavioral_state: Required[BehavioralState]
+    # Estado após aplicar os deltas desta interação
+    behavioral_state_after: BehavioralState
     # Contexto recuperado
     retrieved_messages: list[SimulationMessage]
     business_context: str

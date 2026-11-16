@@ -1,4 +1,4 @@
-from pydantic import Field
+from pydantic import ConfigDict, Field
 
 from app.agents.client.sub_agents.interaction_evaluator.schemas.identified_behavior import (
     IdentifiedBehavior,
@@ -11,6 +11,8 @@ from app.infrastructure.database.models.simulation.persona_snapshot import (
 
 
 class TrustEvaluatorInput(StrictSchema):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     student_message: str
     retrieved_messages: list[SimulationMessage]
     persona: PersonaSnapshotModel

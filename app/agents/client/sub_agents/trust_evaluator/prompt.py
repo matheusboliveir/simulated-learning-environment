@@ -258,9 +258,9 @@ Evaluate the client's trust based on the information below.
 
 {persona_snapshot}
 
-## CURRENT TRUST
+## TRUST BEFORE THE CURRENT INTERACTION
 
-Current trust: {current_trust}
+Trust immediately before the current student interaction: {current_trust}
 
 ## RETRIEVED MESSAGES
 

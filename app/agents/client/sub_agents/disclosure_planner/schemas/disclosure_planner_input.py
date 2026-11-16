@@ -1,3 +1,5 @@
+from pydantic import ConfigDict
+
 from app.agents.client.schemas.states.behavioral_state import BehavioralState
 from app.agents.client.sub_agents.tolerance_evaluator.schemas.tolerance_evaluator_output import (
     ToleranceEvaluatorOutput,
@@ -13,10 +15,13 @@ from app.infrastructure.database.models.simulation.persona_snapshot import (
 
 
 class DisclosurePlannerInput(StrictSchema):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     student_message: str
     business_context: str
     persona: PersonaSnapshotModel
-    behavioral_state: BehavioralState
+    behavioral_state_before: BehavioralState
+    behavioral_state_after: BehavioralState
     retrieved_messages: list[SimulationMessage]
     trust_assessment: TrustEvaluatorOutput
     tolerance_assessment: ToleranceEvaluatorOutput

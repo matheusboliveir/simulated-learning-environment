@@ -15,20 +15,31 @@ class SimulationMessageRepository:
     def __init__(self, client: AsyncQdrantClient) -> None:
         self._client = client
 
-    async def add_message(
+    async def add_messages(
         self,
-        message: SimulationMessage,
-        embedding: list[float],
+        messages: list[SimulationMessage],
+        embeddings: list[list[float]],
     ) -> None:
-        point = models.PointStruct(
-            id=str(message.id),
-            vector=embedding,
-            payload=message.model_dump(mode="json"),
-        )
+        if len(messages) != len(embeddings):
+            raise ValueError(
+                "The number of messages must match the number of embeddings."
+            )
+
+        points = [
+            models.PointStruct(
+                id=str(message.id),
+                vector=embedding,
+                payload=message.model_dump(mode="json"),
+            )
+            for message, embedding in zip(messages, embeddings, strict=True)
+        ]
+
+        if not points:
+            return
 
         await self._client.upsert(
             collection_name=COLLECTION_NAME,
-            points=[point],
+            points=points,
             wait=True,
         )
 

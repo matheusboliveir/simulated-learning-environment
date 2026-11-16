@@ -65,8 +65,8 @@ def create_retrieve_context_node(
       )
 
       return RetrievedContextNodeOutput(
-        messages=retrieved_messages,
-        context=business_context,
+        retrieved_messages=retrieved_messages,
+        business_context=business_context,
       )
 
     return retrieve_context
