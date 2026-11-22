@@ -1,10 +1,17 @@
 from app.agents.client.schemas.states.behavioral_state import BehavioralState
 from app.agents.client.schemas.states.client_graph_state import ClientGraphState
 from app.domain.constants.tolerance_initial_values import TOLERANCE_INITIAL_VALUES
+from app.utils.timing import measure_duration
 
 
 def create_apply_behavioral_deltas_node():
     def apply_behavioral_deltas(state: ClientGraphState) -> dict[str, BehavioralState]:
+        with measure_duration("client.apply_behavioral_deltas"):
+            return calculate_behavioral_deltas(state)
+
+    def calculate_behavioral_deltas(
+        state: ClientGraphState,
+    ) -> dict[str, BehavioralState]:
         trust_assessment = state.get("trust_assessment")
         tolerance_assessment = state.get("tolerance_assessment")
         if trust_assessment is None or tolerance_assessment is None:

@@ -40,6 +40,12 @@ an invented fact.
 - Create an item for each distinct relevant request/topic; avoid duplicates.
 - Keep each planned response concise, actionable, and consistent with the
   persona's role, knowledge, communication style, and business reality.
+- Treat broad questions (such as asking about the company's situation) as
+  requests for a brief summary, not a full inventory. Plan only the most
+  relevant one or two facts; do not pack unrelated context into the answer.
+- Keep content_to_communicate to the minimum needed to answer what was asked.
+  Include background, examples, or metrics only when specifically requested or
+  necessary for clarity.
 - Respect information status and acceptance. Do not present rejected, pending,
   or unverified claims as established facts.
 - Use related information identifiers only when they are supplied and clearly

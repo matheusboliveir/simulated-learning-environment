@@ -21,6 +21,7 @@ from app.utils.formatter import (
     format_schema,
     format_untrusted_text,
 )
+from app.utils.timing import measure_awaitable
 
 
 class ClientAssessmentAgent:
@@ -37,17 +38,22 @@ class ClientAssessmentAgent:
         self,
         input: ClientAssessmentInput,
     ) -> ClientAssessmentOutput:
-        result = await self._chain.ainvoke(
-            {
-                "persona_snapshot": format_persona_snapshot(input.persona),
-                "business_context": format_untrusted_text(input.business_context),
-                "retrieved_messages": format_retrieved_messages(
-                    input.retrieved_messages
-                ),
-                "student_message": format_untrusted_text(input.student_message),
-                "behavioral_state": format_schema(input.behavioral_state),
-                "maximum_tolerance": TOLERANCE_INITIAL_VALUES[input.persona.tolerance],
-                "tolerance_ranges": format_tolerance_ranges(),
-            }
+        result = await measure_awaitable(
+            "client.client_assessment.llm",
+            self._chain.ainvoke(
+                {
+                    "persona_snapshot": format_persona_snapshot(input.persona),
+                    "business_context": format_untrusted_text(input.business_context),
+                    "retrieved_messages": format_retrieved_messages(
+                        input.retrieved_messages
+                    ),
+                    "student_message": format_untrusted_text(input.student_message),
+                    "behavioral_state": format_schema(input.behavioral_state),
+                    "maximum_tolerance": TOLERANCE_INITIAL_VALUES[
+                        input.persona.tolerance
+                    ],
+                    "tolerance_ranges": format_tolerance_ranges(),
+                }
+            ),
         )
         return ClientAssessmentOutput.model_validate(result)

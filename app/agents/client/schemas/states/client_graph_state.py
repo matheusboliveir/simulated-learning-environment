@@ -34,6 +34,7 @@ class ClientGraphState(TypedDict, total=False):
     # Contexto recuperado
     retrieved_messages: list[SimulationMessage]
     business_context: str
+    student_message_embedding: list[float]
     # Avaliações
     interaction_assessment: InteractionAssessmentOutput
     trust_assessment: TrustAssessmentOutput

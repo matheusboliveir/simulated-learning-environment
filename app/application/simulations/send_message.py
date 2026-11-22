@@ -6,6 +6,7 @@ from app.agents.client.schemas.states.client_graph_state import ClientGraphState
 from app.infrastructure.database.repositories.simulation_repository import (
     SimulationRepository,
 )
+from app.utils.timing import measure_awaitable
 
 
 class SendMessage:
@@ -22,8 +23,9 @@ class SendMessage:
         simulation_id: UUID,
         student_message: str,
     ) -> dict[str,str]:
-        simulation = await self._simulation_repository.get_by_id(
-            simulation_id=simulation_id,
+        simulation = await measure_awaitable(
+            "send_message.simulation_lookup",
+            self._simulation_repository.get_by_id(simulation_id=simulation_id),
         )
 
         if simulation is None:

@@ -36,6 +36,7 @@ from app.utils.formatter import (
     format_schema,
     format_untrusted_text,
 )
+from app.utils.timing import measure_awaitable
 
 logger = logging.getLogger(__name__)
 
@@ -113,25 +114,28 @@ class ClientAgent:
             raise ValueError("Post-interaction behavioral state is required.")
 
         retrieved_messages = state.get("retrieved_messages") or []
-        result = await self._chain.ainvoke(
-            {
-                "persona": format_persona_snapshot(state["persona"]),
-                "business_context": format_untrusted_text(
-                    state.get("business_context")
-                ),
-                "behavioral_state_before": format_schema(state["behavioral_state"]),
-                "behavioral_state_after": format_schema(behavioral_state_after),
-                "interaction_assessment": format_schema(
-                    state.get("interaction_assessment")
-                ),
-                "trust_assessment": format_schema(state.get("trust_assessment")),
-                "tolerance_assessment": format_schema(
-                    state.get("tolerance_assessment")
-                ),
-                "retrieved_messages": format_retrieved_messages(retrieved_messages),
-                "disclosure_plan": format_schema(state.get("disclosure_plan")),
-                "student_message": format_untrusted_text(state["student_message"]),
-            }
+        result = await measure_awaitable(
+            "client.response.llm",
+            self._chain.ainvoke(
+                {
+                    "persona": format_persona_snapshot(state["persona"]),
+                    "business_context": format_untrusted_text(
+                        state.get("business_context")
+                    ),
+                    "behavioral_state_before": format_schema(state["behavioral_state"]),
+                    "behavioral_state_after": format_schema(behavioral_state_after),
+                    "interaction_assessment": format_schema(
+                        state.get("interaction_assessment")
+                    ),
+                    "trust_assessment": format_schema(state.get("trust_assessment")),
+                    "tolerance_assessment": format_schema(
+                        state.get("tolerance_assessment")
+                    ),
+                    "retrieved_messages": format_retrieved_messages(retrieved_messages),
+                    "disclosure_plan": format_schema(state.get("disclosure_plan")),
+                    "student_message": format_untrusted_text(state["student_message"]),
+                }
+            ),
         )
         content = result.content
         if isinstance(content, str):
@@ -174,4 +178,4 @@ class ClientAgent:
 
     async def ainvoke(self, state: ClientGraphState) -> ClientGraphState:
         graph = cast(Runnable[ClientGraphState, ClientGraphState], self._graph)
-        return await graph.ainvoke(state)
+        return await measure_awaitable("client.graph.total", graph.ainvoke(state))

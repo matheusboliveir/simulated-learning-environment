@@ -17,6 +17,7 @@ from app.utils.formatter import (
     format_schema,
     format_untrusted_text,
 )
+from app.utils.timing import measure_awaitable
 
 
 class DisclosurePlanner:
@@ -37,19 +38,26 @@ class DisclosurePlanner:
         input: DisclosurePlannerInput,
     ) -> DisclosurePlannerOutput:
 
-        result = await self._chain.ainvoke(
-            {
-                "business_context": format_untrusted_text(input.business_context),
-                "retrieved_messages": format_retrieved_messages(
-                    input.retrieved_messages
-                ),
-                "behavioral_state_before": format_schema(input.behavioral_state_before),
-                "behavioral_state_after": format_schema(input.behavioral_state_after),
-                "trust_assessment": format_schema(input.trust_assessment),
-                "tolerance_assessment": format_schema(input.tolerance_assessment),
-                "student_message": format_untrusted_text(input.student_message),
-                "persona_snapshot": format_persona_snapshot(input.persona),
-            }
+        result = await measure_awaitable(
+            "client.disclosure_planner.llm",
+            self._chain.ainvoke(
+                {
+                    "business_context": format_untrusted_text(input.business_context),
+                    "retrieved_messages": format_retrieved_messages(
+                        input.retrieved_messages
+                    ),
+                    "behavioral_state_before": format_schema(
+                        input.behavioral_state_before
+                    ),
+                    "behavioral_state_after": format_schema(
+                        input.behavioral_state_after
+                    ),
+                    "trust_assessment": format_schema(input.trust_assessment),
+                    "tolerance_assessment": format_schema(input.tolerance_assessment),
+                    "student_message": format_untrusted_text(input.student_message),
+                    "persona_snapshot": format_persona_snapshot(input.persona),
+                }
+            ),
         )
 
         output = DisclosurePlannerOutput.model_validate(result)
