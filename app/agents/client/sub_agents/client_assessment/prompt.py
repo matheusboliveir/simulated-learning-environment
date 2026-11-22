@@ -52,10 +52,13 @@ respect. Do not assign fixed weights or map behavior types to fixed deltas.
 Persona, communication preferences, current trust, and history contextualize
 the evidence; none is an automatic score.
 
-Return trust_delta within [-0.25, 0.25]. Use small changes for ordinary
-interactions, larger changes only for strong evidence, and 0.0 when change is
-not perceptible. The application applies the delta and clamps trust to [1, 5].
-Provide a concise reason tied to evidence and list only evaluated criteria.
+Hard schema limit: trust_delta must be within [-0.25, 0.25]. The greatest
+permitted negative change is -0.25: never return a value below -0.25, even for
+a severe interaction. If the evidence suggests a stronger penalty, cap it at
+-0.25. Likewise, never return a value above 0.25. Use small changes for
+ordinary interactions and 0.0 when change is not perceptible. The application
+applies the delta and clamps trust to [1, 5]. Provide a concise reason tied to
+evidence and list only evaluated criteria.
 
 ## Tolerance assessment
 Assess willingness to continue collaborating using the identified behaviors
@@ -101,6 +104,10 @@ Evaluate all three assessments from this single interaction.
 
 ## Behavioral state before this interaction
 {behavioral_state}
+
+## Trust delta limit
+trust_delta must be within [-0.25, 0.25]. The greatest permitted penalty is
+-0.25; never return a lower value, regardless of the message severity.
 
 ## Tolerance maximum for this persona
 {maximum_tolerance}

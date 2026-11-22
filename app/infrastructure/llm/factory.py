@@ -41,6 +41,7 @@ def get_chat_model(
             model=model or settings.ollama_model,
             base_url=settings.ollama_base_url,
             temperature=temperature,
+            reasoning=False,
         )
 
     raise ValueError(

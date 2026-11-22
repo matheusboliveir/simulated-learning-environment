@@ -8,10 +8,11 @@ BUSINESS_CONTEXT_COLLECTION = "business_context_chunks"
 async def ensure_business_context_collection(
     client: AsyncQdrantClient,
     vector_size: int,
+    collection_name: str,
 ) -> None:
-    if not await client.collection_exists(BUSINESS_CONTEXT_COLLECTION):
+    if not await client.collection_exists(collection_name):
         await client.create_collection(
-            collection_name=BUSINESS_CONTEXT_COLLECTION,
+            collection_name=collection_name,
             vectors_config=models.VectorParams(
                 size=vector_size,
                 distance=models.Distance.COSINE,
@@ -20,7 +21,7 @@ async def ensure_business_context_collection(
 
     await create_payload_index(
         client,
-        BUSINESS_CONTEXT_COLLECTION,
+        collection_name,
         "case_snapshot_id",
         models.PayloadSchemaType.KEYWORD,
     )

@@ -12,8 +12,13 @@ from app.infrastructure.vector.collections.simulation_messages import (
 
 
 class SimulationMessageRepository:
-    def __init__(self, client: AsyncQdrantClient) -> None:
+    def __init__(
+        self,
+        client: AsyncQdrantClient,
+        collection_name: str = COLLECTION_NAME,
+    ) -> None:
         self._client = client
+        self._collection_name = collection_name
 
     async def add_messages(
         self,
@@ -38,7 +43,7 @@ class SimulationMessageRepository:
             return
 
         await self._client.upsert(
-            collection_name=COLLECTION_NAME,
+            collection_name=self._collection_name,
             points=points,
             wait=True,
         )
@@ -51,7 +56,7 @@ class SimulationMessageRepository:
         if limit <= 0:
             raise ValueError("Limit must be greater than zero.")
         points, _ = await self._client.scroll(
-            collection_name=COLLECTION_NAME,
+            collection_name=self._collection_name,
             scroll_filter=models.Filter(
                 must=[
                     models.FieldCondition(
@@ -98,7 +103,7 @@ class SimulationMessageRepository:
             )
 
         result = await self._client.query_points(
-            collection_name=COLLECTION_NAME,
+            collection_name=self._collection_name,
             query=embedding,
             query_filter=models.Filter(must=conditions),
             limit=limit,
@@ -123,7 +128,7 @@ class SimulationMessageRepository:
         simulation_id: UUID,
     ) -> None:
         await self._client.delete(
-            collection_name=COLLECTION_NAME,
+            collection_name=self._collection_name,
             points_selector=models.FilterSelector(
                 filter=models.Filter(
                     must=[

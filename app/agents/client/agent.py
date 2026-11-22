@@ -24,6 +24,7 @@ from app.agents.client.schemas.states.client_graph_state import ClientGraphState
 from app.core.config import get_settings
 from app.infrastructure.llm.config import AgentLLMConfig
 from app.infrastructure.llm.factory import get_chat_model
+from app.infrastructure.vector.collections.names import VectorCollectionNames
 from app.infrastructure.vector.repositories.business_context_repository import (
     BusinessContextRepository,
 )
@@ -47,9 +48,16 @@ class ClientAgent:
         qdrant_client: AsyncQdrantClient,
         embeddings: Embeddings,
         session_factory: async_sessionmaker[AsyncSession],
+        collection_names: VectorCollectionNames,
     ) -> None:
-        self._message_repository = SimulationMessageRepository(qdrant_client)
-        self._context_repository = BusinessContextRepository(qdrant_client)
+        self._message_repository = SimulationMessageRepository(
+            qdrant_client,
+            collection_names.simulation_messages,
+        )
+        self._context_repository = BusinessContextRepository(
+            qdrant_client,
+            collection_names.business_context,
+        )
         self._session_factory = session_factory
         settings = get_settings()
         self._llm = get_chat_model()

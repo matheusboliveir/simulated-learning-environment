@@ -1,6 +1,7 @@
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 from app.core.config import Settings
+from app.infrastructure.embeddings.config import resolve_embedding_model
 
 
 def create_gemini_embeddings(
@@ -10,7 +11,7 @@ def create_gemini_embeddings(
         raise ValueError("GEMINI_API_KEY is required for Gemini embeddings.")
 
     return GoogleGenerativeAIEmbeddings(
-        model=settings.embedding_model or "models/gemini-embedding-001",
+        model=resolve_embedding_model(settings),
         api_key=settings.gemini_api_key,
         output_dimensionality=settings.embedding_dimensions,
     )

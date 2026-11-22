@@ -57,6 +57,11 @@ services:
     restart: unless-stopped
     profiles:
       - ollama
+    gpus: all
+    environment:
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:8b}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
+      OLLAMA_CONTEXT_LENGTH: ${OLLAMA_CONTEXT_LENGTH:-4096}
     ports:
       - "11434:11434"
     volumes:
@@ -70,11 +75,15 @@ services:
           sleep 1
         done
         echo "Baixando/verificando modelos..."
-        ollama pull nomic-embed-text
-        ollama pull gemma3
+        ollama pull "$$OLLAMA_EMBEDDING_MODEL"
+        ollama pull "$$OLLAMA_MODEL"
         wait
     healthcheck:
-      test: ["CMD", "ollama", "list"]
+      test:
+        [
+          "CMD-SHELL",
+          "ollama show \"$$OLLAMA_EMBEDDING_MODEL\" >/dev/null 2>&1 && ollama show \"$$OLLAMA_MODEL\" >/dev/null 2>&1",
+        ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -89,6 +98,11 @@ services:
       - "8000:8000"
     environment:
       LLM_PROVIDER: gemini
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+      GEMINI_SUBAGENT_MODEL: ${GEMINI_SUBAGENT_MODEL:-gemini-3.5-flash-lite}
+      EMBEDDING_PROVIDER: gemini
+      EMBEDDING_MODEL: ${GEMINI_EMBEDDING_MODEL:-models/gemini-embedding-001}
+      EMBEDDING_DIMENSIONS: ${GEMINI_EMBEDDING_DIMENSIONS:-768}
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       QDRANT_URL: http://qdrant:6333
     volumes:
@@ -113,6 +127,10 @@ services:
       - "8000:8000"
     environment:
       LLM_PROVIDER: ollama
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:8b}
+      EMBEDDING_PROVIDER: ollama
+      EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
+      EMBEDDING_DIMENSIONS: ${OLLAMA_EMBEDDING_DIMENSIONS:-768}
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       QDRANT_URL: http://qdrant:6333
       OLLAMA_BASE_URL: http://ollama:11434

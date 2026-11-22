@@ -18,7 +18,10 @@ from app.infrastructure.vector.repositories.business_context_repository import (
 def get_business_context_repository(
     request: Request,
 ) -> BusinessContextRepository:
-    return BusinessContextRepository(request.app.state.qdrant_client)
+    return BusinessContextRepository(
+        request.app.state.qdrant_client,
+        request.app.state.vector_collection_names.business_context,
+    )
 
 
 def get_embeddings(request: Request) -> Embeddings:

@@ -1,4 +1,4 @@
-.PHONY: up up-ollama down migration build rebuild tables
+.PHONY: up up-ollama down migration build rebuild tables reindex-ollama
 
 up:
 	docker compose --profile gemini up -d
@@ -11,6 +11,10 @@ rebuild:
 
 up-ollama:
 	docker compose --profile ollama up -d
+
+reindex-ollama:
+	docker compose --profile ollama up -d --wait qdrant ollama
+	docker compose --profile ollama run --rm --no-deps app-ollama uv run python -m scripts.reindex_qdrant_embeddings
 
 down:
 	docker compose --profile gemini --profile ollama down --remove-orphans

@@ -1,5 +1,5 @@
-from uuid import NAMESPACE_URL, UUID, uuid5
 from typing import cast
+from uuid import NAMESPACE_URL, UUID, uuid5
 
 from qdrant_client import AsyncQdrantClient, models
 
@@ -12,8 +12,13 @@ from app.infrastructure.vector.collections.business_context_chunks import (
 
 
 class BusinessContextRepository:
-    def __init__(self, client: AsyncQdrantClient) -> None:
+    def __init__(
+        self,
+        client: AsyncQdrantClient,
+        collection_name: str = COLLECTION_NAME,
+    ) -> None:
         self._client = client
+        self._collection_name = collection_name
 
     async def add_chunks(
         self,
@@ -48,7 +53,7 @@ class BusinessContextRepository:
             return
 
         await self._client.upsert(
-            collection_name=COLLECTION_NAME,
+            collection_name=self._collection_name,
             points=points,
             wait=True,
         )
@@ -60,7 +65,7 @@ class BusinessContextRepository:
         limit: int = 10,
     ) -> list[RetrievedContextChunk]:
         result = await self._client.query_points(
-            collection_name=COLLECTION_NAME,
+            collection_name=self._collection_name,
             query=embedding,
             query_filter=models.Filter(
                 must=[
@@ -95,7 +100,7 @@ class BusinessContextRepository:
         case_snapshot_id: UUID,
     ) -> None:
         await self._client.delete(
-            collection_name=COLLECTION_NAME,
+            collection_name=self._collection_name,
             points_selector=models.FilterSelector(
                 filter=models.Filter(
                     must=[

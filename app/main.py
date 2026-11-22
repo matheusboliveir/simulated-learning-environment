@@ -14,6 +14,9 @@ from app.infrastructure.database.connection import SessionFactory, engine
 from app.infrastructure.embeddings.factory import create_embeddings
 from app.infrastructure.vector.client import create_qdrant_client
 from app.infrastructure.vector.collections import ensure_collections
+from app.infrastructure.vector.collections.names import (
+    create_vector_collection_names,
+)
 
 
 @asynccontextmanager
@@ -21,17 +24,21 @@ async def lifespan(app: FastAPI):
     settings = get_settings()
     qdrant_client = create_qdrant_client()
     embeddings = create_embeddings()
+    collection_names = create_vector_collection_names(settings)
     try:
         await ensure_collections(
             qdrant_client,
             settings.embedding_dimensions,
+            collection_names,
         )
         app.state.qdrant_client = qdrant_client
         app.state.embeddings = embeddings
+        app.state.vector_collection_names = collection_names
         app.state.client_agent = ClientAgent(
             qdrant_client=qdrant_client,
             embeddings=embeddings,
             session_factory=SessionFactory,
+            collection_names=collection_names,
         )
         yield
     finally:

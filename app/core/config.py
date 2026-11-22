@@ -28,7 +28,7 @@ class Settings(BaseSettings):
 
     # Ollama
     ollama_base_url: str = "http://localhost:11434"
-    ollama_model: str = "gemma3"
+    ollama_model: str = "qwen3:8b"
 
     # Qdrant
     qdrant_url: str = "http://localhost:6333"
