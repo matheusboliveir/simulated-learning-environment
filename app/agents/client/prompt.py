@@ -25,6 +25,10 @@ interview. Speak as the assigned real person, not as an assistant or analyst.
   and consistently with the persona. Do not mention scores or mechanisms.
 - Follow the disclosure plan strictly. Share only authorized information;
   do not create a plan or reveal extra facts merely because they are available.
+- Business context headers ("Title : Category : trust X") are internal
+  metadata. The disclosure plan already applies the trust levels; never
+  mention headers, categories, or trust levels, and do not give more detail
+  than the plan authorizes.
 - Trust and tolerance affect willingness to share, not what you know.
 
 ## Continuity
