@@ -14,8 +14,13 @@ TOLERANCE_RANGES: Final = {
     BehaviorType.CONFUSING_QUESTION: (-10, -3),
     BehaviorType.INVASIVE_QUESTION: (-20, -8),
     BehaviorType.OFFENSIVE_COMMENT: (-35, -25),
-    BehaviorType.ACTIVE_LISTENING: (3, 8),
-    BehaviorType.RELEVANT_QUESTION: (2, 6),
+    BehaviorType.ACTIVE_LISTENING: (5, 12),
+    BehaviorType.RELEVANT_QUESTION: (3, 10),
     BehaviorType.VIABLE_SOLUTION: (8, 15),
-    BehaviorType.FRIENDLINESS: (2, 5),
+    BehaviorType.FRIENDLINESS: (3, 8),
 }
+
+# Ganhos de tolerância são multiplicados pela tolerância atual em relação ao
+# máximo do preset (quem está mais irritado se acalma mais devagar), nunca
+# abaixo deste piso.
+TOLERANCE_RECOVERY_FLOOR: Final = 0.25

@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 
 from app.domain.constants.behavior_weights import BEHAVIOR_WEIGHTS, SECONDARY_FACTOR
-from app.domain.constants.tolerance_ranges import TOLERANCE_RANGES
+from app.domain.constants.tolerance_ranges import (
+    TOLERANCE_RANGES,
+    TOLERANCE_RECOVERY_FLOOR,
+)
 from app.domain.constants.trust_ranges import TRUST_DELTA_LIMIT, TRUST_RANGES
 from app.domain.enums.behavior_intensity import BehaviorIntensity
 from app.domain.enums.behavior_type import BehaviorType
@@ -65,9 +68,11 @@ def calculate_behavioral_deltas(
     """Calcula as variações de confiança e tolerância de uma mensagem.
 
     Cada tipo de comportamento conta uma única vez, com a maior intensidade
-    informada. A confiança é limitada a ±TRUST_DELTA_LIMIT. A tolerância
-    devolvida já é a variação efetiva, depois de limitar o resultado entre
-    zero e o máximo do preset.
+    informada. A confiança é limitada a ±TRUST_DELTA_LIMIT. Um ganho de
+    tolerância é multiplicado pela tolerância atual em relação ao máximo
+    (com piso TOLERANCE_RECOVERY_FLOOR); perdas não são reduzidas. A
+    tolerância devolvida já é a variação efetiva, depois de limitar o
+    resultado entre zero e o máximo do preset.
     """
     strongest: dict[BehaviorType, BehaviorIntensity] = {}
     for behavior, intensity in behaviors:
@@ -83,14 +88,20 @@ def calculate_behavioral_deltas(
     )
     trust_delta = round(max(-TRUST_DELTA_LIMIT, min(TRUST_DELTA_LIMIT, raw_trust)), 2)
 
-    raw_tolerance = round(
-        _combine(
-            {
-                behavior: _value_for_intensity(TOLERANCE_RANGES[behavior], intensity)
-                for behavior, intensity in strongest.items()
-            }
-        )
+    combined_tolerance = _combine(
+        {
+            behavior: _value_for_intensity(TOLERANCE_RANGES[behavior], intensity)
+            for behavior, intensity in strongest.items()
+        }
     )
+    if combined_tolerance > 0 and maximum_tolerance > 0:
+        # Quem está mais irritado se acalma mais devagar.
+        recovery_factor = max(
+            TOLERANCE_RECOVERY_FLOOR,
+            current_tolerance / maximum_tolerance,
+        )
+        combined_tolerance *= recovery_factor
+    raw_tolerance = round(combined_tolerance)
     tolerance_after = min(maximum_tolerance, max(0, current_tolerance + raw_tolerance))
     tolerance_delta = int(round(tolerance_after - current_tolerance))
 
