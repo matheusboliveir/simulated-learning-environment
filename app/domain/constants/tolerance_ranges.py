@@ -2,15 +2,20 @@ from typing import Final
 
 from app.domain.enums.behavior_type import BehaviorType
 
+# Variação de tolerância por comportamento (mínimo, máximo), em pontos.
+# Faixas negativas são maiores que as positivas (assimetria negativa:
+# Baumeister et al., 2001; Slovic, 1993). Os valores de uma mensagem são
+# combinados por peso em behavioral_deltas.py. Calibração: duas interações
+# ofensivas de intensidade média levam um preset profissional (100) a ~40.
 TOLERANCE_RANGES: Final = {
-    BehaviorType.REPETITIVE_QUESTION: (-5, -2),
-    BehaviorType.OFF_TOPIC_QUESTION: (-8, -2),
-    BehaviorType.JAILBREAK_ATTEMPT: (-10, -5),
-    BehaviorType.CONFUSING_QUESTION: (-3, -1),
-    BehaviorType.INVASIVE_QUESTION: (-8, -3),
-    BehaviorType.OFFENSIVE_COMMENT: (-15, -8),
-    BehaviorType.ACTIVE_LISTENING: (1, 3),
-    BehaviorType.RELEVANT_QUESTION: (1, 2),
-    BehaviorType.VIABLE_SOLUTION: (3, 10),
-    BehaviorType.FRIENDLINESS: (1, 2),
+    BehaviorType.REPETITIVE_QUESTION: (-12, -5),
+    BehaviorType.OFF_TOPIC_QUESTION: (-20, -8),
+    BehaviorType.JAILBREAK_ATTEMPT: (-25, -12),
+    BehaviorType.CONFUSING_QUESTION: (-10, -3),
+    BehaviorType.INVASIVE_QUESTION: (-20, -8),
+    BehaviorType.OFFENSIVE_COMMENT: (-35, -25),
+    BehaviorType.ACTIVE_LISTENING: (3, 8),
+    BehaviorType.RELEVANT_QUESTION: (2, 6),
+    BehaviorType.VIABLE_SOLUTION: (8, 15),
+    BehaviorType.FRIENDLINESS: (2, 5),
 }

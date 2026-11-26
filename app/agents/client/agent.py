@@ -22,6 +22,7 @@ from app.agents.client.nodes.retrieve_context_node import create_retrieve_contex
 from app.agents.client.prompt import CLIENT_HUMAN_PROMPT, CLIENT_SYSTEM_PROMPT
 from app.agents.client.schemas.states.client_graph_state import ClientGraphState
 from app.core.config import get_settings
+from app.domain.constants.tolerance_initial_values import TOLERANCE_INITIAL_VALUES
 from app.infrastructure.llm.config import AgentLLMConfig
 from app.infrastructure.llm.factory import get_chat_model
 from app.infrastructure.vector.collections.names import VectorCollectionNames
@@ -132,6 +133,9 @@ class ClientAgent:
                     ),
                     "behavioral_state_before": format_schema(state["behavioral_state"]),
                     "behavioral_state_after": format_schema(behavioral_state_after),
+                    "maximum_tolerance": TOLERANCE_INITIAL_VALUES[
+                        state["persona"].tolerance
+                    ],
                     "interaction_assessment": format_schema(
                         state.get("interaction_assessment")
                     ),

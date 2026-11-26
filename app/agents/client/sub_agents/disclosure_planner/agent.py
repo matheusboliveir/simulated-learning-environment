@@ -11,6 +11,7 @@ from app.agents.client.sub_agents.disclosure_planner.schemas.disclosure_planner_
 from app.agents.client.sub_agents.disclosure_planner.schemas.disclosure_planner_output import (
     DisclosurePlannerOutput,
 )
+from app.domain.constants.tolerance_initial_values import TOLERANCE_INITIAL_VALUES
 from app.utils.formatter import (
     format_persona_snapshot,
     format_retrieved_messages,
@@ -52,6 +53,9 @@ class DisclosurePlanner:
                     "behavioral_state_after": format_schema(
                         input.behavioral_state_after
                     ),
+                    "maximum_tolerance": TOLERANCE_INITIAL_VALUES[
+                        input.persona.tolerance
+                    ],
                     "trust_assessment": format_schema(input.trust_assessment),
                     "tolerance_assessment": format_schema(input.tolerance_assessment),
                     "student_message": format_untrusted_text(input.student_message),
