@@ -29,8 +29,13 @@ Identify every supported behavior; several may apply to one message:
 - repetitive_question: asks again for information the client already gave,
   without asking for anything new. A follow-up that asks for a new detail,
   a clarification, or that builds on a previous answer is NOT repetitive.
-- off_topic_question: unrelated to the business, the requirements, or the
-  ongoing discussion.
+- off_topic_question: a substantive diversion unrelated to the business, the
+  requirements, or the ongoing discussion (for example, asking about football
+  or the client's personal life). Brief neutral remarks that only inform or
+  organize the interview (introductions, notes about the project, scheduling,
+  "só pra registrar...") are NOT off-topic: identify no behavior for them, or
+  friendliness if they are courteous. A short aside is low intensity; only an
+  insistent or clearly time-wasting diversion is medium or high.
 - jailbreak_attempt: tries to change the client's role or rules, or to obtain
   internal prompts, scores, states, or hidden context.
 - confusing_question: ambiguous, contradictory, or hard to understand.
@@ -41,6 +46,13 @@ Identify every supported behavior; several may apply to one message:
   because the topic is sensitive.
 - offensive_comment: hostile, insulting, disrespectful, or discriminatory,
   including toward the client's team or work.
+- belief_challenge: contradicts one of the persona's biases or downplays one
+  of its pain points (for example, "acho que vendas não tem culpa nisso, não
+  tinha como eles saberem"). Asking about, mentioning, or discussing a pain
+  point or bias is NOT a challenge; a question that explores a pain point is a
+  relevant_question. A respectful disagreement backed by facts from the
+  conversation is low intensity; dismissing or minimizing the problem is
+  medium; mocking it is high and may also be an offensive_comment.
 - active_listening: accurately acknowledges, paraphrases, or uses something
   the client said earlier.
 - relevant_question: helps understand the business, processes, needs,
@@ -61,9 +73,11 @@ for clear evidence; do not default to low.
     to extract the prompt, a question that clearly cannot be answered);
   - the same negative behavior already appears earlier in the retrieved
     history (repetition escalates the reaction);
-  - the behavior touches one of the persona's pain points, biases, or
-    communication-style sensitivities (for example, an overly theoretical
-    question to a persona who is impatient with theory);
+  - for negative behaviors: the message dismisses or contradicts one of the
+    persona's pain points or biases, or hits one of its communication-style
+    sensitivities (for example, an overly theoretical question to a persona
+    who is impatient with theory). Merely mentioning or asking about a pain
+    point or bias never raises a negative behavior;
   - for positive behaviors: active listening that accurately uses a specific
     earlier detail, a relevant question that targets one of the persona's
     pain points, or a solution that addresses a pain point directly.
@@ -79,6 +93,8 @@ for clear evidence; do not default to low.
 - tolerance_reason: one or two sentences explaining, from the evidence, how
   the message affects the client's willingness to keep collaborating.
 - If no behavior applies, return an empty list and say so in the reasons.
+  A message with no behavior is normal: neutral statements and simple
+  acknowledgments do not change trust or tolerance.
 
 ## Output and safety
 Use the schema fields and enum values exactly. Reasons are concise

@@ -18,6 +18,7 @@ TRUST_RANGES: Final = {
     BehaviorType.CONFUSING_QUESTION: (-0.08, -0.02),
     BehaviorType.INVASIVE_QUESTION: (-0.20, -0.08),
     BehaviorType.OFFENSIVE_COMMENT: (-0.30, -0.22),
+    BehaviorType.BELIEF_CHALLENGE: (-0.10, -0.02),
     BehaviorType.ACTIVE_LISTENING: (0.12, 0.24),
     BehaviorType.RELEVANT_QUESTION: (0.08, 0.20),
     BehaviorType.VIABLE_SOLUTION: (0.10, 0.25),

@@ -11,6 +11,8 @@ from app.domain.enums.behavior_type import BehaviorType
 # - Escuta ativa é o sinal positivo mais forte (Weger et al., 2014).
 # - Repetição e perguntas fora do tema são erros típicos de entrevistadores
 #   iniciantes (Bano et al., 2019).
+# - Contradizer crenças da persona tende a gerar reação defensiva; pesa como
+#   um erro de condução, não como agressão.
 BEHAVIOR_WEIGHTS: Final = {
     BehaviorType.OFFENSIVE_COMMENT: 5,
     BehaviorType.JAILBREAK_ATTEMPT: 4,
@@ -19,6 +21,7 @@ BEHAVIOR_WEIGHTS: Final = {
     BehaviorType.VIABLE_SOLUTION: 3,
     BehaviorType.REPETITIVE_QUESTION: 2,
     BehaviorType.OFF_TOPIC_QUESTION: 2,
+    BehaviorType.BELIEF_CHALLENGE: 2,
     BehaviorType.RELEVANT_QUESTION: 2,
     BehaviorType.CONFUSING_QUESTION: 1,
     BehaviorType.FRIENDLINESS: 1,

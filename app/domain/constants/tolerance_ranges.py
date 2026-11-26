@@ -14,6 +14,7 @@ TOLERANCE_RANGES: Final = {
     BehaviorType.CONFUSING_QUESTION: (-10, -3),
     BehaviorType.INVASIVE_QUESTION: (-20, -8),
     BehaviorType.OFFENSIVE_COMMENT: (-35, -25),
+    BehaviorType.BELIEF_CHALLENGE: (-15, -5),
     BehaviorType.ACTIVE_LISTENING: (5, 12),
     BehaviorType.RELEVANT_QUESTION: (3, 10),
     BehaviorType.VIABLE_SOLUTION: (8, 15),

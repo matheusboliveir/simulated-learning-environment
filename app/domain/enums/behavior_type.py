@@ -8,6 +8,7 @@ class BehaviorType(str, Enum):
     CONFUSING_QUESTION = "confusing_question"
     INVASIVE_QUESTION = "invasive_question"
     OFFENSIVE_COMMENT = "offensive_comment"
+    BELIEF_CHALLENGE = "belief_challenge"
     ACTIVE_LISTENING = "active_listening"
     RELEVANT_QUESTION = "relevant_question"
     VIABLE_SOLUTION = "viable_solution"
